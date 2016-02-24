@@ -39,6 +39,7 @@ set :public_folder, File.join(settings.root, 'public')
 set :views, File.join(settings.root, 'dashboards')
 set :default_dashboard, nil
 set :auth_token, nil
+set :routes_folder, File.join(settings.root, 'lib/routes')
 
 if File.exists?(settings.history_file)
   set history: YAML.load_file(settings.history_file)
@@ -60,6 +61,15 @@ end
 
 at_exit do
   File.write(settings.history_file, settings.history.to_yaml)
+end
+
+# here grab routes file
+routes = Dir.entries(settings.routes_folder)
+if routes.count > 2
+  routes.each do |r|
+    file = r.gsub('.rb', '')
+    require "#{settings.routes_folder}/file"
+  end
 end
 
 get '/' do
