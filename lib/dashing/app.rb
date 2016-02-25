@@ -65,10 +65,12 @@ end
 
 # here grab routes file
 routes = Dir.entries(settings.routes_folder)
-if routes.count > 2
+routes.delete('.')
+routes.delete('..')
+if routes.count
   routes.each do |r|
     file = r.gsub('.rb', '')
-    require "#{settings.routes_folder}/file"
+    require "#{settings.routes_folder}/#{file}"
   end
 end
 
